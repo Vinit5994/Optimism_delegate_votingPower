@@ -37,6 +37,7 @@ export const GET = async (req: NextRequest) => {
     let skip = 0;
     let hasMoreData = true;
     let count = 0;
+    let batchCount =1;
 
     while (hasMoreData) {
       // Fetch a batch of toDelegate data from MongoDB
@@ -45,7 +46,6 @@ export const GET = async (req: NextRequest) => {
         hasMoreData = false;
         break;
       }
-console.log("list of 10 delegate ",toDelegates);
       // Execute the GraphQL query for each delegate
       for (const toDelegate of toDelegates) {
         
@@ -56,9 +56,9 @@ console.log("list of 10 delegate ",toDelegates);
           variables: { delegate },
         });
         const fetchedData = result.data.delegateVotesChangeds[0];
-        console.log(fetchedData);
         count++;
         console.log("count",count)
+        console.log("batchCount",batchCount)
         if (fetchedData) {
           // Update MongoDB document with the fetched data
          
@@ -70,7 +70,7 @@ console.log("list of 10 delegate ",toDelegates);
           
         }
       }
-
+batchCount++;
       skip += batchSize;
     
     }
